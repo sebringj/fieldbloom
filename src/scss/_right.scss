@@ -1,4 +1,6 @@
     .right {
       width: 20%;
       height: 100vh;
+      box-sizing: border-box;
+      padding: $sectionPadding 0;
     }

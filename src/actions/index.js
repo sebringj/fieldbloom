@@ -12,16 +12,19 @@ export const ADD_FIELD = 'ADD_FIELD'
 export const DELETE_FIELD = 'REMOVE_FIELD'
 export const ORDER_FIELD = 'ORDER_CHOICE'
 
-export function addQuestion(question) {
-  store.dispatch({ type: ADD_QUESTION, question: question.update('id', id => Date.now()) })
+export function addQuestion(question, boundingClientRect) {
+  store.dispatch({
+    type: ADD_QUESTION,
+    question: question.update('id', id => Date.now())
+  })
 }
 
 export function deleteQuestion(question) {
   store.dispatch({ type: DELETE_QUESTION, question })
 }
 
-export function selectQuestion(question) {
-  store.dispatch({ type: SELECT_QUESTION, question })
+export function selectQuestion(question, boundingClientRect) {
+  store.dispatch({ type: SELECT_QUESTION, question, boundingClientRect })
 }
 
 export function orderQuestion(question, order) {

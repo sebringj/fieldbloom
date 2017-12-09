@@ -1,17 +1,33 @@
+@import './_vars';
+
+// fonts go here
 @import url('https://fonts.googleapis.com/css?family=Open+Sans|PT+Sans');
-// no scroll
+
+// no bounce
 html, body { height: 100vh; overflow: hidden; }
+
 body {
   background-color: #fff;
   margin: 0;
   padding: 0;
+
   .app {
     display: flex;
     flex-direction: row;
+
+    // no bounce
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: auto;
+
     @import './left';
     @import './center';
     @import './right';
+
+    @import './questions/question';
+    @import './editQuestions/question';
   }
 }
-
-@import './questions/question';

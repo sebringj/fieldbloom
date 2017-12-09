@@ -27,7 +27,14 @@ class Center extends Component {
         {this.props.questions.map((question, i) => {
           let data = question.toObject()
           let QuestionClass = Questions[data.class]
-          return <QuestionClass key={data.id} {...data} order={i+1} />
+          return (
+            <QuestionClass
+              key={data.id}
+              {...data}
+              order={i+1}
+              selected={this.props.selectedIndex === i}
+            />
+          )
         })}
         <AddQuestion />
       </div>
@@ -37,7 +44,8 @@ class Center extends Component {
 
 const mapStateToProps = state => {
   return {
-    questions: state.get('questions').toArray()
+    selectedIndex: state.get('selectedIndex'),
+    questions: state.get('questions')
   }
 }
 

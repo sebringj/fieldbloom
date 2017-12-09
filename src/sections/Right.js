@@ -3,15 +3,17 @@ import { connect } from 'react-redux'
 import * as EditQuestions from '../components/EditQuestions'
 
 class Right extends Component {
+
+  componentWillReceiveProps(nextProps) {
+    //if (nextProps.selectedIndex !== this.props.selectedIndex)
+  }
+
   render() {
 
-    let selected
-    for (let question of this.props.questions) {
-      if (question.get('selected')) {
-        selected = question
-        break
-      }
-    }
+    if (this.props.selectedIndex === -1)
+      return null
+
+    const selected = this.props.questions.get(this.props.selectedIndex)
 
     if (!selected)
       return null
@@ -20,7 +22,7 @@ class Right extends Component {
 
     return (
       <div className="right">
-        <QuestionClass {...selected.toObject()}  />
+        <QuestionClass {...selected.toObject()} {...this.props}  />
       </div>
     )
   }
@@ -28,7 +30,9 @@ class Right extends Component {
 
 const mapStateToProps = state => {
   return {
-    questions: state.get('questions').toArray()
+    selectedBoundingClientRect: state.get('selectedBoundingClientRect'),
+    selectedIndex: state.get('selectedIndex'),
+    questions: state.get('questions')
   }
 }
 
