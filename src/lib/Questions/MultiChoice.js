@@ -5,7 +5,6 @@ export default Map({
   class: 'MultiChoice',
   classLabel: 'Multi Choice',
   title: 'Which country do you live in?',
-  placeholder: 'Which country do you life in?',
   choices: List([
     'United States', 'Canada', 'Australia'
   ])

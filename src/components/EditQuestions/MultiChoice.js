@@ -17,7 +17,7 @@ export default class MultiChoice extends Component {
         <div className="entryHeader">Question</div>
         <textarea
           type="text" value={this.props.title}
-          placeholder={this.props.placeholder}
+          placeholder="Enter your question"
           onChange={this.onChange} />
         <div className="entryHeader">Answer Choices</div>
         <div className="choices">
