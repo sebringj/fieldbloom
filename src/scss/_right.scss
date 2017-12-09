@@ -3,4 +3,15 @@
       height: 100vh;
       box-sizing: border-box;
       padding: $sectionPadding 0;
+      position: relative;
+      transition: transform 0.25s, opacity 0.25s;
+      transform: translateX(-20px);
+      opacity: 0;
+      left: 1000px;
+
+      &.show {
+        transform: translateX(0px);
+        opacity: 1;
+        left: 0;
+      }
     }

@@ -1,0 +1,52 @@
+.editQuestion {
+
+  $backgroundColor: #E8EEF3;
+  $borderColor: #D9E1E9;
+
+  background-color: $backgroundColor;
+  box-sizing: border-box;
+  padding: 20px;
+  padding-top: 60px;
+  border: 1px solid $borderColor;
+  position: relative;
+
+  .title {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    color: #51646D;
+    font-size: 12px;
+    margin-bottom: 30px;
+
+    .q {
+      font-family: 'PT Sans', sans-serif;
+      color: #336BEA;
+      font-weight: 700;
+      display: inline-block;
+      margin-right: 5px;
+    }
+  }
+
+  // arrow (my own way w/ rotation)
+  &:after, &:before {
+    content: " ";
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    left: -6px;
+    top: calc(50% - 5px);
+    z-index: 0;
+    background-color: $backgroundColor;
+    border: 1px solid $borderColor;
+    transform: rotate(45deg);
+    display: block;
+  }
+  &:before {
+    border: none;
+    left: -4px;
+    z-index: 1;
+    width: 11px;
+    height: 11px;
+  }
+
+  @import './_multiChoice';
+}

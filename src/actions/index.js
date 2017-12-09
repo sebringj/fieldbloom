@@ -23,8 +23,8 @@ export function deleteQuestion(question) {
   store.dispatch({ type: DELETE_QUESTION, question })
 }
 
-export function selectQuestion(question, boundingClientRect) {
-  store.dispatch({ type: SELECT_QUESTION, question, boundingClientRect })
+export function selectQuestion(question, offsetTop) {
+  store.dispatch({ type: SELECT_QUESTION, question, offsetTop })
 }
 
 export function orderQuestion(question, order) {

@@ -44,7 +44,7 @@ function reducer(state = initialState, action) {
       }
       return state.merge({
         selectedIndex,
-        selectedBoundingClientRect: action.boundingClientRect
+        selectedOffsetTop: action.offsetTop
       })
     }
 

@@ -43,7 +43,10 @@ class MultiChoice extends Component {
   }
 
   onClick = () => {
-    actions.selectQuestion(this.props)
+    actions.selectQuestion(
+      this.props,
+      findDOMNode(this).offsetTop
+    )
   }
 
   render() {
@@ -63,7 +66,7 @@ class MultiChoice extends Component {
           {this.props.title}
         </div>
         <div className="choices">
-        {this.props.choices.map(choice => <div className="choice" key={choice}>{choice}</div>)}
+          {this.props.choices.map(choice => <div className="choice" key={choice}>{choice}</div>)}
         </div>
       </div>
     )

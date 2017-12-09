@@ -4,33 +4,52 @@ import * as EditQuestions from '../components/EditQuestions'
 
 class Right extends Component {
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      showEnabled: false
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
-    //if (nextProps.selectedIndex !== this.props.selectedIndex)
+    if (nextProps.selectedIndex !== this.props.selectedIndex) {
+      this.setState({ showEnabled: false }, () => {
+        setTimeout(() => {
+          this.setState({ showEnabled: true })
+        }, 100)
+      })
+    }
   }
 
   render() {
 
-    if (this.props.selectedIndex === -1)
+    if (this.props.selectedIndex === -1) {
       return null
+    }
 
     const selected = this.props.questions.get(this.props.selectedIndex)
 
-    if (!selected)
-      return null
-
     let QuestionClass = EditQuestions[selected.get('class')]
 
+    let cssClasses = ['right']
+    if (this.state.showEnabled)
+      cssClasses.push('show')
+
+    let offsetTop = this.props.selectedOffsetTop
+
     return (
-      <div className="right">
-        <QuestionClass {...selected.toObject()} {...this.props}  />
+      <div className={cssClasses.join(' ')}>
+        <div style={{ height: offsetTop >= 0 ? offsetTop : 0 }}></div>
+        <QuestionClass {...selected.toObject()} {...this.props} />
       </div>
     )
   }
 }
 
 const mapStateToProps = state => {
+  // todo: must be way to grab multiple keys at the same time in immutable?
   return {
-    selectedBoundingClientRect: state.get('selectedBoundingClientRect'),
+    selectedOffsetTop: state.get('selectedOffsetTop'),
     selectedIndex: state.get('selectedIndex'),
     questions: state.get('questions')
   }
