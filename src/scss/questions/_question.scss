@@ -1,0 +1,48 @@
+.question {
+  box-sizing: border-box;
+  border: 2px dashed #eee;
+  padding: 50px 50px 30px 70px;
+  background-color: #fff;
+  margin-top: -2px;
+  position: relative;
+  user-select: none;
+  cursor: pointer;
+
+  transition: transform 0.5s, opacity 0.5s;
+  transform: scale(0.1);
+
+  &.dropped {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .title {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    color: #51646D;
+    position: relative;
+
+    .q {
+      font-family: 'PT Sans', sans-serif;
+      color: #336BEA;
+      font-weight: 700;
+      position: absolute;
+      left: -30px;
+      top: 2px;
+    }
+  }
+
+  &:hover {
+    border-color: #ccc;
+    z-index: 1
+  }
+
+  &.selected {
+    border: 3px solid #336BEA;
+    background-color: #F5F7FE;
+    z-index: 2;
+    cursor: move;
+  }
+
+  @import './multiChoice'
+}
