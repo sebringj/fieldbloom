@@ -25,13 +25,12 @@ class Center extends Component {
     return connectDropTarget(
       <div className={'center' + (isOver ? ' highlight' : '')}>
         {this.props.questions.map((question, i) => {
-          let data = question.toObject()
-          let QuestionClass = Questions[data.class]
+          let QuestionClass = Questions[question.get('class')]
           return (
             <QuestionClass
-              key={data.id}
-              {...data}
-              order={i+1}
+              key={question.get('id')}
+              question={question}
+              index={i}
               selected={this.props.selectedIndex === i}
             />
           )

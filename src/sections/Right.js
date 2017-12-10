@@ -22,14 +22,12 @@ class Right extends Component {
   }
 
   render() {
-
-    if (this.props.selectedIndex === -1) {
+    if (this.props.selectedIndex === -1)
       return null
-    }
 
-    const selected = this.props.questions.get(this.props.selectedIndex)
+    const question = this.props.questions.get(this.props.selectedIndex)
 
-    let QuestionClass = EditQuestions[selected.get('class')]
+    let QuestionClass = EditQuestions[question.get('class')]
 
     let cssClasses = ['right']
     if (this.state.showEnabled)
@@ -40,7 +38,7 @@ class Right extends Component {
     return (
       <div className={cssClasses.join(' ')}>
         <div style={{ height: offsetTop >= 0 ? offsetTop : 0 }}></div>
-        <QuestionClass {...selected.toObject()} {...this.props} />
+        <QuestionClass question={question} {...this.props} />
       </div>
     )
   }

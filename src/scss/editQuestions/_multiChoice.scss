@@ -1,0 +1,58 @@
+&.multiChoice {
+
+  .choices {
+    .choice {
+
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items:center;
+      margin-bottom: 10px;
+
+      $iconWidth: 20px;
+
+      .arrows {
+        font-size: 14px;
+        color: #999;
+        cursor: move;
+        width: 14px;
+        height: 14px;
+      }
+
+      input {
+        border: 1px solid $borderColor;
+        width: calc(100% - 70px);
+        box-sizing: border-box;
+        padding: 10px;
+        font-family: 'Open Sans', sans-serif;
+        resize: none;
+        color: #999;
+      }
+
+      .circle {
+        border-radius: 100%;
+        width: 16px;
+        height: 16px;
+        position: relative;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        &.plus {
+          background-color: #41BF05;
+          color: #fff;
+        }
+        &.minus {
+          background-color: #DD4942;
+          color: #fff;
+        }
+        svg {
+          position: absolute;
+          display: block;
+          font-size: 8px;
+        }
+      }
+    }
+  }
+
+}

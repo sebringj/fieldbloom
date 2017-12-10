@@ -10,14 +10,6 @@ const source = {
       id: props.id,
       index: props.index
     }
-  },
-  endDrag(props, monitor, component) {
-    if (!monitor.didDrop())
-      return
-    const item = monitor.getItem()
-    const dropResult = monitor.getDropResult()
-    //if (item.type === ItemTypes.ICON)
-    //  actions.addQuestion(getDefaultData(ItemTypes.ICON, props.icon))
   }
 }
 
@@ -39,12 +31,14 @@ class MultiChoice extends Component {
   componentDidMount() {
     setTimeout(() => {
       this.setState({ dropped: true })
+      findDOMNode(this).scrollIntoView({ behavior: 'smooth'} )
     }, 100)
   }
 
   onClick = () => {
     actions.selectQuestion(
-      this.props,
+      this.props.question,
+      this.props.index,
       findDOMNode(this).offsetTop
     )
   }
@@ -62,11 +56,13 @@ class MultiChoice extends Component {
         onClick={this.onClick}
         className={cssClasses.join(' ')}>
         <div className="title">
-          <div className="q">{'Q'+this.props.order}</div>
-          {this.props.title}
+          <div className="q">{'Q'+(this.props.index+1)}</div>
+          {this.props.question.get('title')}
         </div>
         <div className="choices">
-          {this.props.choices.map(choice => <div className="choice" key={choice}>{choice}</div>)}
+          {this.props.question.get('choices').map(choice => (
+            <div className="choice" key={choice.get('id')}>{choice.get('text')}</div>
+          ))}
         </div>
       </div>
     )

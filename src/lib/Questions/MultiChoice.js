@@ -6,6 +6,8 @@ export default Map({
   classLabel: 'Multi Choice',
   title: 'Which country do you live in?',
   choices: List([
-    'United States', 'Canada', 'Australia'
+    Map({ id: Math.random(), text: 'United States' }),
+    Map({ id: Math.random(), text: 'Canada' }),
+    Map({ id: Math.random(), text: 'Australia' })
   ])
 })

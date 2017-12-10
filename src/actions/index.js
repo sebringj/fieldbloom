@@ -7,12 +7,13 @@ export const ADD_QUESTION = 'ADD_QUESTION'
 export const DELETE_QUESTION = 'DELETE_QUESTION'
 export const SELECT_QUESTION = 'SELECT_QUESTION'
 export const ORDER_QUESTION =  'ORDER_QUESTION'
-export const CHANGE_TEXT = 'CHANGE_TEXT'
-export const ADD_FIELD = 'ADD_FIELD'
-export const DELETE_FIELD = 'REMOVE_FIELD'
-export const ORDER_FIELD = 'ORDER_CHOICE'
+export const CHANGE_QUESTION = 'CHANGE_QUESTION'
+export const ADD_CHOICE = 'ADD_CHOICE'
+export const DELETE_CHOICE = 'DELETE_CHOICE'
+export const ORDER_CHOICE = 'ORDER_CHOICE'
+export const CHANGE_CHOICE = 'CHANGE_CHOICE'
 
-export function addQuestion(question, boundingClientRect) {
+export function addQuestion(question) {
   store.dispatch({
     type: ADD_QUESTION,
     question: question.update('id', id => Date.now())
@@ -23,26 +24,34 @@ export function deleteQuestion(question) {
   store.dispatch({ type: DELETE_QUESTION, question })
 }
 
-export function selectQuestion(question, offsetTop) {
-  store.dispatch({ type: SELECT_QUESTION, question, offsetTop })
+export function selectQuestion(question, index, offsetTop) {
+  store.dispatch({ type: SELECT_QUESTION, question, index, offsetTop })
+}
+
+export function changeQuestion(question, index) {
+  store.dispatch({ type: CHANGE_QUESTION, question, index })
 }
 
 export function orderQuestion(question, order) {
   store.dispatch({ type: ORDER_QUESTION, question, order })
 }
 
-export function changeText(question, field, text) {
-  store.dispatch({ type: CHANGE_TEXT, question, field, text })
+export function addChoice(question, choice) {
+  store.dispatch({
+    type: ADD_CHOICE,
+    question,
+    choice: choice.update('id', id => Date.now())
+  })
 }
 
-export function addField(question, field) {
-  store.dispatch({ type: ADD_FIELD, question, field })
+export function deleteChoice(question, choice) {
+  store.dispatch({ type: DELETE_CHOICE, question, choice })
 }
 
-export function deleteField(question, field) {
-  store.dispatch({ type: DELETE_FIELD, question, field })
+export function orderChoice(question, choice, order) {
+  store.dispatch({ type: ORDER_CHOICE, question, choice, order })
 }
 
-export function orderField(question, field, order) {
-  store.dispatch({ type: ORDER_FIELD, question, field, order })
+export function changeChoice(question, questionIndex, choice, choiceIndex) {
+  store.dispatch({ type: CHANGE_CHOICE, question, questionIndex, choice, choiceIndex })
 }

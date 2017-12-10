@@ -20,6 +20,8 @@ function reducer(state = initialState, action) {
   ORDER_FIELD
   */
 
+  console.log(action)
+
   switch(action.type) {
 
     case actions.ADD_QUESTION: {
@@ -33,24 +35,28 @@ function reducer(state = initialState, action) {
     }
 
     case actions.SELECT_QUESTION: {
-      let selectedIndex = -1
-      let i = 0
-      for (let q of state.get('questions')) {
-        if (q.get('id') === action.question.id) {
-          selectedIndex = i
-          break
-        }
-        i++
-      }
       return state.merge({
-        selectedIndex,
+        selectedIndex: action.index,
         selectedOffsetTop: action.offsetTop
       })
     }
 
-    default:
-      return state
+    case actions.CHANGE_QUESTION: {
+      return state.set('questions',
+        state.get('questions').set(action.index, action.question)
+      )
+    }
+
+    case actions.CHANGE_CHOICE: {
+      let choices = action.question.get('choices').set(action.choiceIndex, action.choice)
+      let question = action.question.set('choices', choices)
+      return state.set('questions',
+        state.get('questions').set(action.questionIndex, question)
+      )
+    }
   }
+
+  return state
 }
 
 export default reducer
