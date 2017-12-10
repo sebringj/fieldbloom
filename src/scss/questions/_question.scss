@@ -6,7 +6,7 @@
   margin-top: -2px;
   position: relative;
   user-select: none;
-  cursor: pointer;
+  cursor: move;
 
   transition: transform 0.5s, opacity 0.5s;
   transform: scale(0.1);
@@ -14,6 +14,25 @@
   &.dropped {
     opacity: 1;
     transform: scale(1);
+  }
+
+  .delete {
+    position: absolute;
+    top: 45px;
+    right: 40px;
+    display:block;
+    color: #999;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    cursor: pointer;
+    z-index: 2;
+    svg {
+      pointer-events: none;
+    }
   }
 
   .title {
@@ -41,7 +60,6 @@
     border: 2px solid #336BEA;
     background-color: #F5F7FE;
     z-index: 2;
-    cursor: move;
   }
 
   @import './multiChoice'

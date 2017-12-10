@@ -6,7 +6,7 @@ import store from '../lib/store'
 export const ADD_QUESTION = 'ADD_QUESTION'
 export const DELETE_QUESTION = 'DELETE_QUESTION'
 export const SELECT_QUESTION = 'SELECT_QUESTION'
-export const ORDER_QUESTION =  'ORDER_QUESTION'
+export const SWAP_QUESTIONS =  'SWAP_QUESTIONS'
 export const CHANGE_QUESTION = 'CHANGE_QUESTION'
 export const ADD_CHOICE = 'ADD_CHOICE'
 export const DELETE_CHOICE = 'DELETE_CHOICE'
@@ -20,8 +20,8 @@ export function addQuestion(question) {
   })
 }
 
-export function deleteQuestion(question) {
-  store.dispatch({ type: DELETE_QUESTION, question })
+export function deleteQuestion(question, index) {
+  store.dispatch({ type: DELETE_QUESTION, question, index })
 }
 
 export function selectQuestion(question, index, offsetTop) {
@@ -32,8 +32,8 @@ export function changeQuestion(question, index) {
   store.dispatch({ type: CHANGE_QUESTION, question, index })
 }
 
-export function orderQuestion(question, order) {
-  store.dispatch({ type: ORDER_QUESTION, question, order })
+export function swapQuestions(index1, index2) {
+  store.dispatch({ type: SWAP_QUESTIONS, index1, index2 })
 }
 
 export function addChoice(question, choice) {

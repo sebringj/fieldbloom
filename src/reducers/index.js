@@ -41,6 +41,33 @@ function reducer(state = initialState, action) {
       })
     }
 
+    case actions.DELETE_QUESTION: {
+      let id = action.question.get('id')
+      let questions = state.get('questions').filter(question => {
+        return question.get('id') !== id
+      })
+      return state.merge({
+        selectedIndex: -1,
+        questions
+      })
+    }
+
+    case actions.SWAP_QUESTIONS: {
+      let questions = state.get('questions')
+      const q1 = questions.get(action.index1)
+      const q2 = questions.get(action.index2)
+      questions = questions.set(action.index1, q2).set(action.index2, q1)
+      let selectedIndex = state.get('selectedIndex')
+      if (selectedIndex === action.index1)
+        selectedIndex = action.index2
+      else if (selectedIndex === action.index2)
+        selectedIndex = action.index1
+      return state.merge({
+        selectedIndex,
+        questions
+      })
+    }
+
     case actions.CHANGE_QUESTION: {
       return state.set('questions',
         state.get('questions').set(action.index, action.question)

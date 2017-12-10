@@ -3,6 +3,8 @@ import { DragSource, DropTarget } from 'react-dnd'
 import ItemTypes from '../../lib/ItemTypes'
 import * as actions from '../../actions'
 import { findDOMNode } from 'react-dom'
+import TrashO from 'react-icons/lib/fa/trash-o'
+import flow from 'lodash/flow'
 
 const source = {
   beginDrag(props) {
@@ -13,11 +15,39 @@ const source = {
   }
 }
 
-function collect(connect, monitor) {
+const target = {
+	hover(props, monitor, component) {
+		const dragIndex = monitor.getItem().index
+		const hoverIndex = props.index
+		if (dragIndex === hoverIndex)
+			return
+		const hoverBoundingRect = findDOMNode(component).getBoundingClientRect()
+		const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
+		const clientOffset = monitor.getClientOffset()
+		const hoverClientY = clientOffset.y - hoverBoundingRect.top
+		if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY)
+			return
+		if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY)
+			return
+
+    actions.swapQuestions(dragIndex, hoverIndex)
+		monitor.getItem().index = hoverIndex
+	},
+}
+
+function collectSource(connect, monitor) {
   return {
     connectDragSource: connect.dragSource(),
     connectDragPreview: connect.dragPreview(),
     isDragging: monitor.isDragging()
+  }
+}
+
+function collectTarget(connect, monitor) {
+  return {
+    connectDropTarget: connect.dropTarget(),
+    canDrop: monitor.canDrop(),
+    isOver: monitor.isOver()
   }
 }
 
@@ -43,6 +73,11 @@ class MultiChoice extends Component {
     )
   }
 
+  delete = (ev) => {
+    ev.stopPropagation()
+    actions.deleteQuestion(this.props.question, this.props.index)
+  }
+
   render() {
     const cssClasses = ['question','multiChoice']
     if (this.props.selected)
@@ -50,23 +85,29 @@ class MultiChoice extends Component {
     if (this.state.dropped)
       cssClasses.push('dropped')
 
-    const { x, y, connectDragSource, isOver, canDrop } = this.props;
-    return connectDragSource(
-      <div
-        onClick={this.onClick}
-        className={cssClasses.join(' ')}>
-        <div className="title">
-          <div className="q">{'Q'+(this.props.index+1)}</div>
-          {this.props.question.get('title')}
+    const { x, y, connectDragSource, connectDropTarget, isOver, canDrop } = this.props;
+    return connectDropTarget(
+      connectDragSource(
+        <div
+          onClick={this.onClick}
+          className={cssClasses.join(' ')}>
+          <div className="delete" onClick={this.delete}><TrashO /></div>
+          <div className="title">
+            <div className="q">{'Q'+(this.props.index+1)}</div>
+            {this.props.question.get('title')}
+          </div>
+          <div className="choices">
+            {this.props.question.get('choices').map(choice => (
+              <div className="choice" key={choice.get('id')}>{choice.get('text')}</div>
+            ))}
+          </div>
         </div>
-        <div className="choices">
-          {this.props.question.get('choices').map(choice => (
-            <div className="choice" key={choice.get('id')}>{choice.get('text')}</div>
-          ))}
-        </div>
-      </div>
+      )
     )
   }
 }
 
-export default DragSource(ItemTypes.QUESTION, source, collect)(MultiChoice)
+export default flow(
+  DragSource(ItemTypes.QUESTION, source, collectSource),
+  DropTarget(ItemTypes.QUESTION, target, collectTarget)
+)(MultiChoice)
