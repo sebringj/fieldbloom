@@ -36,11 +36,12 @@ export function swapQuestions(index1, index2, offsetTop) {
   store.dispatch({ type: SWAP_QUESTIONS, index1, index2, offsetTop })
 }
 
-export function addChoice(question, choice) {
+export function addChoice(question, choice, afterChoiceIndex) {
   store.dispatch({
     type: ADD_CHOICE,
     question,
-    choice: choice.update('id', id => Date.now())
+    choice: choice.update('id', id => Date.now()),
+    afterChoiceIndex
   })
 }
 

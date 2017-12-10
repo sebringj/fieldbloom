@@ -7,6 +7,7 @@ import Minus from 'react-icons/lib/fa/minus'
 import * as actions from '../../actions'
 import ItemTypes from '../../lib/ItemTypes'
 import flow from 'lodash/flow'
+const { Map } = require('immutable')
 
 const source = {
   beginDrag(props) {
@@ -54,18 +55,27 @@ function collectTarget(connect, monitor) {
 }
 
 class Choice extends Component {
+
+  onFocus = () => {
+    let el = findDOMNode(this).draggable = false
+  }
+
+  onBlur = () => {
+    let el = findDOMNode(this).draggable = true
+  }
+
   render() {
     const { x, y, connectDragSource, connectDropTarget, isOver, canDrop } = this.props;
     return connectDropTarget(
       connectDragSource(
         <div className="choice">
           <ArrowsV className="arrows" />
-          <input type="text" value={this.props.choice.get('text')}
+          <input onFocus={this.onFocus} onBlur={this.onBlur} type="text" value={this.props.choice.get('text')}
             onChange={ev => this.props.onChoiceChange(ev, this.props.choice, this.props.index)} />
-          <div className="circle plus">
+          <div className="circle plus" onClick={this.props.onAdd}>
             <Plus />
           </div>
-          <div className="circle minus">
+          <div className="circle minus" onClick={this.props.onDelete}>
             <Minus />
           </div>
         </div>
@@ -117,6 +127,8 @@ class MultiChoice extends Component {
               choice={choice}
               id={choice.get('id')}
               index={i}
+              onAdd={() => actions.addChoice(this.props.question, Map({ text: 'New Choice' }), i)}
+              onDelete={() => actions.deleteChoice(this.props.question, choice)}
               onChoiceChange={this.onChoiceChange}
               swapChoices={(dragIndex, hoverIndex) => actions.swapChoices(this.props.question, dragIndex, hoverIndex)}
             />

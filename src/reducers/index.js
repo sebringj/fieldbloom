@@ -73,6 +73,21 @@ function reducer(state = initialState, action) {
       )
     }
 
+    case actions.ADD_CHOICE: {
+      let choices = action.question.get('choices')
+        .insert(action.afterChoiceIndex + 1, action.choice)
+      let updatedQuestion = action.question.set('choices', choices)
+      let questionId = updatedQuestion.get('id')
+      let qIndex = 0
+      let questions = state.get('questions')
+      for (let question of questions) {
+        if (question.get('id') === questionId)
+          break
+        qIndex++
+      }
+      return state.set('questions', questions.set(qIndex, updatedQuestion))
+    }
+
     case actions.CHANGE_CHOICE: {
       let choices = action.question.get('choices').set(action.choiceIndex, action.choice)
       let question = action.question.set('choices', choices)
@@ -102,7 +117,23 @@ function reducer(state = initialState, action) {
         }
         qIndex++
       }
-      return state
+    }
+
+    case actions.DELETE_CHOICE: {
+      let choiceId = action.choice.get('id')
+      let choices = action.question.get('choices').filter(choice => {
+        return choice.get('id') !== choiceId
+      })
+      let changedQuestion = action.question.set('choices', choices)
+      let questionId = changedQuestion.get('id')
+      let questions = state.get('questions')
+      let qIndex = 0
+      for (let question of questions) {
+        if (question.get('id') === questionId)
+          break
+        qIndex++
+      }
+      return state.set('questions', questions.set(qIndex, changedQuestion))
     }
   }
 
