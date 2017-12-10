@@ -1,6 +1,7 @@
 const ItemTypes = {
   ICON: 'ICON',
   QUESTION: 'QUESTION',
-  CENTER: 'CENTER'
+  CENTER: 'CENTER',
+  CHOICE: 'CHOICE'
 }
 export default ItemTypes

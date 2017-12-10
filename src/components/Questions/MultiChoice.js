@@ -30,7 +30,7 @@ const target = {
 		if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY)
 			return
 
-    actions.swapQuestions(dragIndex, hoverIndex)
+    actions.swapQuestions(dragIndex, hoverIndex, findDOMNode(component).offsetTop)
 		monitor.getItem().index = hoverIndex
 	},
 }
@@ -75,7 +75,11 @@ class MultiChoice extends Component {
 
   delete = (ev) => {
     ev.stopPropagation()
-    actions.deleteQuestion(this.props.question, this.props.index)
+    this.setState({ dropped: false }, () => {
+      setTimeout(() => {
+        actions.deleteQuestion(this.props.question, this.props.index)
+      }, 250)
+    })
   }
 
   render() {

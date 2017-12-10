@@ -1,11 +1,85 @@
 import React, { Component } from 'react'
-import * as actions from '../../actions'
+import { DragSource, DropTarget } from 'react-dnd'
+import { findDOMNode } from 'react-dom'
 import ArrowsV from 'react-icons/lib/fa/arrows-v'
 import Plus from 'react-icons/lib/fa/plus'
 import Minus from 'react-icons/lib/fa/minus'
+import * as actions from '../../actions'
+import ItemTypes from '../../lib/ItemTypes'
+import flow from 'lodash/flow'
 
+const source = {
+  beginDrag(props) {
+    return {
+      id: props.id,
+      index: props.index
+    }
+  }
+}
 
-export default class MultiChoice extends Component {
+const target = {
+	hover(props, monitor, component) {
+		const dragIndex = monitor.getItem().index
+		const hoverIndex = props.index
+		if (dragIndex === hoverIndex)
+			return
+		const hoverBoundingRect = findDOMNode(component).getBoundingClientRect()
+		const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
+		const clientOffset = monitor.getClientOffset()
+		const hoverClientY = clientOffset.y - hoverBoundingRect.top
+		if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY)
+			return
+		if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY)
+			return
+
+    props.swapChoices(dragIndex, hoverIndex)
+		monitor.getItem().index = hoverIndex
+	},
+}
+
+function collectSource(connect, monitor) {
+  return {
+    connectDragSource: connect.dragSource(),
+    connectDragPreview: connect.dragPreview(),
+    isDragging: monitor.isDragging()
+  }
+}
+
+function collectTarget(connect, monitor) {
+  return {
+    connectDropTarget: connect.dropTarget(),
+    canDrop: monitor.canDrop(),
+    isOver: monitor.isOver()
+  }
+}
+
+class Choice extends Component {
+  render() {
+    const { x, y, connectDragSource, connectDropTarget, isOver, canDrop } = this.props;
+    return connectDropTarget(
+      connectDragSource(
+        <div className="choice">
+          <ArrowsV className="arrows" />
+          <input type="text" value={this.props.choice.get('text')}
+            onChange={ev => this.props.onChoiceChange(ev, this.props.choice, this.props.index)} />
+          <div className="circle plus">
+            <Plus />
+          </div>
+          <div className="circle minus">
+            <Minus />
+          </div>
+        </div>
+      )
+    )
+  }
+}
+
+const ChoiceDragDrop = flow(
+  DragSource(ItemTypes.CHOICE, source, collectSource),
+  DropTarget(ItemTypes.CHOICE, target, collectTarget)
+)(Choice)
+
+class MultiChoice extends Component {
 
   onTitleChange = ev => {
     actions.changeQuestion(
@@ -38,20 +112,22 @@ export default class MultiChoice extends Component {
         <div className="entryHeader">Answer Choices</div>
         <div className="choices">
           {this.props.question.get('choices').map((choice, i) => (
-            <div className="choice" key={choice.get('id')}>
-              <ArrowsV className="arrows" />
-              <input type="text" value={choice.get('text')}
-                onChange={ev => this.onChoiceChange(ev, choice, i)} />
-              <div className="circle plus">
-                <Plus />
-              </div>
-              <div className="circle minus">
-                <Minus />
-              </div>
-            </div>
+            <ChoiceDragDrop
+              key={choice.get('id')}
+              choice={choice}
+              id={choice.get('id')}
+              index={i}
+              onChoiceChange={this.onChoiceChange}
+              swapChoices={(dragIndex, hoverIndex) => actions.swapChoices(this.props.question, dragIndex, hoverIndex)}
+            />
           ))}
         </div>
       </div>
     )
   }
 }
+
+export default flow(
+  DragSource(ItemTypes.CHOICE, source, collectSource),
+  DropTarget(ItemTypes.CHOICE, target, collectTarget)
+)(MultiChoice)
